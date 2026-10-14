@@ -21,7 +21,7 @@ El taller también busca **mostrar la velocidad**: de un ambiente vacío a una a
 
 **Principio rector (Marco SDD GFT):** ninguna línea de código nace sin un spec aprobado.
 
-**Principio de diseño del taller:** KISS (*Keep It Simple, Stupid*). Casos pequeños, una pantalla por caso, pocas reglas y pocos escenarios.
+**Principio de diseño del taller:** arquitectura KISS (*Keep It Simple, Stupid*), experiencia de producto real. El stack es mínimo; la aplicación resultante tiene varias vistas, indicadores y gráficos.
 
 ---
 
@@ -29,7 +29,7 @@ El taller también busca **mostrar la velocidad**: de un ambiente vacío a una a
 
 | Marco SDD GFT | En el taller | Artefacto |
 |---|---|---|
-| ① Brief Funcional (qué y por qué) | Se entrega al participante | `Manifiesto Funcional` del caso (A, B o C) |
+| ① Brief Funcional (qué y por qué) | Se entrega al participante | `Manifiesto Funcional` del caso (A o B) |
 | ① Brief Técnico (contexto, restricciones) | Se entrega al participante | `Manifiesto Técnico` común + datos semilla JSON |
 | ② Spec Funcional | Lo construye el participante con Claude Code | `specs/01-spec-funcional.md` |
 | ② Spec Técnico | Lo construye el participante con Claude Code | `specs/02-spec-tecnico.md` |
@@ -45,7 +45,7 @@ El taller también busca **mostrar la velocidad**: de un ambiente vacío a una a
 
 ### Parte 1 — Teoría (30 min)
 
-> El contenido slide por slide, con notas para los facilitadores, está en `06_Presentacion_Teoria_SDD.md`.
+> El contenido slide por slide, con notas para los facilitadores, está en `05_Presentacion_Teoria_SDD.md`.
 
 | Bloque | Dur. | Lidera | Qué se explica |
 |---|---|---|---|
@@ -54,7 +54,7 @@ El taller también busca **mostrar la velocidad**: de un ambiente vacío a una a
 | **Anatomía del SDD — visión general** | 5' | GFT | Marco SDD de GFT: Brief → Spec Funcional → Spec Técnico → Plan → Código → Validación. Qué rol cumple cada etapa y por qué el spec es la fuente única de verdad. |
 | **Anatomía del SDD — detalle y profundidad** | 5' | AWS | Spec ID y trazabilidad de punta a punta (RN → CA → tarea → código → prueba); gates de aprobación entre etapas. El spec como artefacto vivo: lo aprendido al construir se devuelve al spec. |
 | **SDD con Claude Code sobre AWS** | 5' | AWS | Cómo Claude Code consume specs como contexto (CLAUDE.md, archivos del repo) y ejecuta planes. Claude en Amazon Bedrock: seguridad, gobierno y camino del laptop a la nube. |
-| **Reglas del juego** | 3' | GFT | Los 3 casos de uso, el kit que recibe cada participante y los gates por etapa. Duración de cada etapa, checkpoints y cómo pedir ayuda a los facilitadores. |
+| **Reglas del juego** | 3' | GFT | Los 2 casos de uso, el kit que recibe cada participante y los gates por etapa. Duración de cada etapa, checkpoints y cómo pedir ayuda a los facilitadores. |
 
 ### Parte 2 — Práctica guiada (75 min)
 
@@ -62,11 +62,11 @@ El taller también busca **mostrar la velocidad**: de un ambiente vacío a una a
 |---|---|---|---|
 | **Arranque desde cero** | 5' | Facilitadores | Cada participante entra a su ambiente web vacío y confirma su caso. Sube los manifiestos a `kit/` y, con un prompt, Claude Code crea la estructura del proyecto y el `CLAUDE.md` con las reglas SDD. |
 | **Spec Funcional** | 7' | Facilitadores | Claude Code transforma el Manifiesto Funcional en reglas RN-xx y criterios CA-xx en Gherkin, con matriz de trazabilidad. El participante revisa con el checklist y aprueba (**Gate 1**). |
-| **Spec Técnico** | 5' | Facilitadores | Claude Code deriva del spec funcional y del Manifiesto Técnico: contratos API, funciones de dominio, pantalla y pruebas. El participante valida que cada CA tenga dónde vivir y aprueba (**Gate 2**). |
-| **Plan** | 3' | Facilitadores | Claude Code genera el plan de tareas T-xx (máx. 6) con IDs trazados y criterio de verificación. Incluye la plantilla de pruebas de usuario `04-uat.md`. |
-| **Implementación desde cero** | 35' | Facilitadores | Claude Code ejecuta el plan sin pausas: proyecto, datos, dominio con pruebas, API y pantalla. Cita IDs en código y pruebas. **Checkpoint a mitad del bloque:** dominio con `npm test` en verde; si aparece un vacío, se actualiza primero el spec. |
+| **Spec Técnico** | 5' | Facilitadores | Claude Code deriva del spec funcional y del Manifiesto Técnico: contratos API, funciones de dominio, vistas y pruebas. El participante valida que cada CA tenga dónde vivir y aprueba (**Gate 2**). |
+| **Plan** | 3' | Facilitadores | Claude Code genera el plan de tareas T-xx (máx. 8) con IDs trazados y criterio de verificación. Incluye la plantilla de pruebas de usuario `04-uat.md`. |
+| **Implementación desde cero** | 35' | Facilitadores | Claude Code ejecuta el plan sin pausas: proyecto, datos, dominio con pruebas, API y vistas. Cita IDs en código y pruebas. **Checkpoint a mitad del bloque:** dominio con `npm test` en verde; si aparece un vacío, se actualiza primero el spec. |
 | **Pruebas de usuario final** | 10' | Facilitadores | Con la app corriendo en el ambiente, el participante ejecuta los escenarios del manifiesto y registra OK/NOK en `04-uat.md`. Los defectos se corrigen citando el CA afectado. |
-| **Demo y cierre** | 10' | GFT & AWS | Tres demos de 2 minutos (una por caso): spec → app → un escenario → rastreo de un CA hasta el código. Cierre con aprendizajes, próximos pasos y encuesta; recordar descargar el proyecto antes de que se elimine la cuenta. |
+| **Demo y cierre** | 10' | GFT & AWS | Dos demos de 3 minutos (una por caso): spec → app → un escenario → rastreo de un CA hasta el código. Cierre con aprendizajes, próximos pasos y encuesta; recordar descargar el proyecto antes de que se elimine la cuenta. |
 
 ---
 
@@ -77,33 +77,32 @@ El taller también busca **mostrar la velocidad**: de un ambiente vacío a una a
 | Arranque | Proyecto creado desde cero, manifiestos en `kit/`, `CLAUDE.md` creado y Claude Code respondiendo | Facilitador AWS resuelve el acceso al ambiente o se forma pareja |
 | Spec Funcional | Spec Funcional en estado APROBADO | Aprobar con preguntas abiertas como [SUPUESTO] |
 | Spec Técnico | Spec Técnico en estado APROBADO | Usar el **prompt exprés** (Spec Técnico + Plan en uno) de la guía |
-| Plan | Plan generado (máx. 6 tareas) | Aprobar el plan tal cual; los estilos visuales van al final |
-| Mitad de la implementación | Dominio implementado, `npm test` en verde | Priorizar API + pantalla del flujo principal |
+| Plan | Plan generado (máx. 8 tareas) | Aprobar el plan tal cual |
+| Mitad de la implementación | Dominio implementado, `npm test` en verde | Priorizar API + vista principal; vistas secundarias como pendiente |
 | Implementación | App corriendo en el ambiente | Probar escenarios vía `curl` contra la API |
 | Pruebas de usuario final | ≥ 80% de escenarios OK | Registrar NOK y defecto como aprendizaje del spec |
 
 ---
 
-## 5. Los tres casos de uso
+## 5. Los dos casos de uso
 
-Los casos están acotados con criterio **KISS** para que quepan, desde cero, en los 35 minutos de implementación.
+El alcance está dimensionado con el ensayo: con casos de una sola pantalla, la implementación tomó unos 7 minutos. Por eso cada caso se amplió a varias vistas con una experiencia visual de producto real, para que el resultado impresione y aproveche los 35 minutos de implementación.
 
-| Caso | Nombre | Usuario | Foco de aprendizaje | Pantallas | Reglas | Escenarios |
+| Caso | Nombre | Usuarios | Foco de aprendizaje | Vistas | Reglas | Escenarios |
 |---|---|---|---|---|---|---|
-| **A** | Originación digital de crédito libre inversión | Cliente final | Reglas en cadena con orden de evaluación y capacidad de pago | 1 | 10 | 9 |
-| **B** | Pricing Engine | Asesor comercial | Tasa en cascada, descuentos, piso y tope | 1 | 10 | 6 |
-| **C** | Motor de riesgo de perfil crediticio | Analista de riesgo | Reglas knock-out, scorecard de 3 variables y explicación de la decisión | 1 | 11 | 8 |
+| **A** | Originación digital de crédito libre inversión | Cliente final · gerente comercial | Journey de 4 pasos, reglas en cadena, capacidad de pago, plan de pagos | 2 (journey + panel) | 14 | 13 |
+| **B** | Pricing Engine | Asesor · gerente de producto | Tasa en cascada visual, piso y tope, comparador de plazos | 3 (cotizador, historial, parámetros) | 14 | 10 |
 
-Los tres usan la misma arquitectura de referencia: front estático de una sola página, back Node.js/Express y datos en archivos JSON. Cada evaluación se registra con un ID; no hay vistas de historial ni de administración. Los datos, tasas y umbrales son **ficticios e ilustrativos**.
+Los dos usan la misma arquitectura de referencia: front SPA en HTML/CSS/JS sin librerías, back Node.js/Express y datos en archivos JSON. Todos incluyen tarjetas de indicadores, insignias de estado por color y gráficos hechos con CSS o SVG. Los datos, tasas y umbrales son **ficticios e ilustrativos**.
 
-**Asignación recomendada:** repartir en tercios. Si se conoce el perfil, orientar A a perfiles de experiencia/front, B a perfiles de producto/cálculo y C a perfiles de reglas/analítica.
+**Asignación recomendada:** repartir mitad y mitad. Si se conoce el perfil, orientar A a perfiles de experiencia/front y B a perfiles de producto/cálculo.
 
 ---
 
 ## 6. Kit que recibe cada participante
 
 1. **Cuenta AWS efímera con ambiente de Claude Code** — cada asistente recibe su propia cuenta AWS temporal, con Amazon Bedrock y un ambiente web de Claude Code listo para usar en el navegador. Arranca **vacía**: todo el proyecto se crea desde cero en la sesión. La cuenta se elimina al terminar el taller.
-2. `Manifiesto Funcional` de su caso (A, B o C) — el requerimiento de negocio.
+2. `Manifiesto Funcional` de su caso (A o B) — el requerimiento de negocio.
 3. `Manifiesto Técnico` — arquitectura de referencia común + anexo de datos JSON de su caso.
 4. `Guía del Participante` — paso a paso, prompts listos para pegar y checklists de cada gate.
 
@@ -138,14 +137,14 @@ AWS entrega a cada asistente una **cuenta AWS efímera** con su propio Amazon Be
 
 ## 9. Preparación del equipo facilitador (T-7 días)
 
-- [ ] **Ensayo completo de los 3 casos desde cero en el ambiente de AWS**, cronometrando cada etapa contra la agenda.
+- [ ] **Ensayo completo de los 2 casos desde cero en el ambiente de AWS**, cronometrando cada etapa contra la agenda.
 - [ ] Guardar una **solución de referencia** por caso (specs + código) como respaldo para demos o rescates.
 - [ ] Confirmar con AWS las cuentas efímeras: una por asistente (más cuentas de respaldo), cómo se entregan las credenciales y Claude Code autenticado contra el Bedrock de cada cuenta.
 - [ ] Confirmar con AWS que el ambiente trae Node.js 20+ y acceso al registro npm, y que la app del participante (puerto 3000) se puede abrir en el navegador.
 - [ ] Confirmar con AWS que en cada cuenta efímera el modelo Claude está habilitado en Bedrock y que sus cuotas por defecto aguantan una sesión intensa de Claude Code.
 - [ ] Confirmar con AWS cuánto tiempo vive cada cuenta (que cubra los 105 minutos con margen) y cuándo se elimina.
 - [ ] Validar que la red del recinto permite acceder al ambiente web.
-- [ ] Diseñar las slides del bloque teórico a partir de `06_Presentacion_Teoria_SDD.md` y completar el texto marcado [COMPLETAR] (slide 17, AWS) y los logos de la slide 2.
+- [ ] Diseñar las slides del bloque teórico a partir de `05_Presentacion_Teoria_SDD.md` y completar el texto marcado [COMPLETAR] (slide 15, AWS) y los logos de la slide 2.
 - [ ] Preparar encuesta de cierre.
 
 ---

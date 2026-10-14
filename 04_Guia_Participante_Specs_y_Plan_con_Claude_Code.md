@@ -53,9 +53,11 @@ Prepara el proyecto desde cero:
 5. Spec vivo: si la implementación revela un vacío, primero se actualiza el spec y se registra en "Control de cambios".
 6. Los datos semilla del manifiesto técnico se usan exactamente como están.
 7. KISS: la solución más simple que cumpla el spec.
+8. Buenas prácticas obligatorias: las de la sección 8 de kit/manifiesto-tecnico.md (SOLID, microservicio autocontenido, cero código espagueti).
 
 ## Stack
-Node.js 20+, Express (única dependencia), HTML/CSS/JS vanilla en public/, datos en data/*.json, pruebas con node:test.
+Node.js 20+, Express (única dependencia), front en frontend/ (HTML/CSS/JS vanilla), back en backend/ (API, reglas, datos en backend/data/*.json y pruebas con node:test).
+Front y back solo se comunican por la API /api.
 
 ## Comandos
 - npm install
@@ -83,7 +85,7 @@ Actúa como Analista Funcional aplicando Spec-Driven Development.
 Lee CLAUDE.md y kit/manifiesto-funcional.md.
 Crea specs/01-spec-funcional.md. NO escribas código ni crees otros archivos.
 
-Estructura (máximo 1 página y media):
+Estructura (máximo 2 páginas):
 0. Encabezado: Spec ID (prefijo del manifiesto + "-F-001"), versión 0.1, Estado: BORRADOR, fecha.
 1. Objetivo y alcance (máximo 5 líneas).
 2. Reglas de negocio: tabla RN-xx | regla con valores exactos.
@@ -124,12 +126,13 @@ Lee CLAUDE.md, specs/01-spec-funcional.md (APROBADO) y kit/manifiesto-tecnico.md
 (solo el anexo de datos de mi caso).
 Crea specs/02-spec-tecnico.md. NO escribas código.
 
-Estructura (máximo 1 página y media):
+Estructura (máximo 2 páginas):
 0. Encabezado: Spec ID (el del funcional cambiando "-F-" por "-T-"), versión 0.1, Estado: BORRADOR.
 1. Estructura de archivos (la del manifiesto técnico).
-2. Contrato del endpoint: método, ruta, request, response y errores.
+2. Contratos de API: por endpoint, método, ruta, request, response y errores.
 3. Funciones de dominio: firma y RN-xx que implementa cada una.
-4. Pantalla: campos, validaciones y resultado que se muestra.
+4. Vistas: por cada vista, componentes (tarjetas, KPI, tablas, gráficos), campos, validaciones y estados,
+   siguiendo los lineamientos de experiencia de usuario del manifiesto técnico.
 5. Pruebas: una por escenario, con entrada y resultado esperado.
 6. Matriz de trazabilidad: CA-xx → función → prueba.
 7. Control de cambios.
@@ -141,8 +144,9 @@ Al terminar, dame un resumen de 3 líneas.
 ### 2.2 Revisa tú (Gate 2)
 
 - [ ] Cada CA aparece en la matriz con función y prueba.
-- [ ] Las reglas viven en funciones de dominio puras y los valores de política salen de `data/*.json`.
+- [ ] Las reglas viven en funciones de dominio puras y los valores de política salen de `backend/data/*.json`.
 - [ ] No hay dependencias ni funcionalidades fuera del spec.
+- [ ] La estructura respeta las buenas prácticas: las reglas de negocio (`domain.js`) reciben los datos como parámetros, sin depender del servidor web ni de los archivos; `routes.js` sin reglas de negocio, `GET /api/health` definido; front en `frontend/` y back en `backend/`.
 
 ### 2.3 Aprueba
 
@@ -163,13 +167,15 @@ Cambia el estado a APROBADO, versión 1.0, y registra en Control de cambios.
 Actúa como Tech Lead. Lee CLAUDE.md y los dos specs APROBADOS.
 Crea specs/03-plan.md. NO escribas código todavía.
 
-Máximo 6 tareas, en este orden:
-T-01 package.json, server.js mínimo y datos semilla en data/
+Máximo 8 tareas, en este orden:
+T-01 package.json, backend/src/server.js mínimo y datos semilla en backend/data/
 T-02 dominio + pruebas unitarias (checkpoint: npm test en verde)
-T-03 endpoint de la API
-T-04 pantalla en public/
-T-05 arranque de la app y prueba del flujo principal
-T-06 specs/04-uat.md con la tabla de escenarios
+T-03 repositorio, rutas y endpoints de la API (incluye GET /api/health)
+T-04 front base en frontend/: index.html, styles.css con los componentes visuales, navegación, api.js y formato.js
+T-05 vista principal del caso
+T-06 vistas secundarias del caso
+T-07 arranque de la app y prueba del flujo principal
+T-08 specs/04-uat.md con la tabla de escenarios
      (columnas: Escenario | CA | Resultado esperado | Resultado obtenido | OK/NOK)
 Por tarea: casilla [ ], archivos, IDs RN/CA que cubre y criterio de verificación.
 Muéstrame el plan en una tabla corta.
@@ -178,7 +184,7 @@ Muéstrame el plan en una tabla corta.
 ### 3.2 Revisa tú
 
 - [ ] Toda RN y todo CA aparece en al menos una tarea.
-- [ ] El dominio y sus pruebas van antes que la API y la pantalla.
+- [ ] El dominio y sus pruebas van antes que la API y las vistas.
 
 ---
 
@@ -194,6 +200,7 @@ Implementa specs/03-plan.md tarea por tarea, en orden.
 - Si encuentras un vacío o contradicción en un spec: actualiza primero el spec
   (Control de cambios) y luego continúa.
 - No agregues funcionalidades ni dependencias fuera del spec.
+- Aplica las buenas prácticas de la sección 8 del manifiesto técnico y, al final, verifica su checklist.
 - No me pidas confirmación entre tareas salvo que estés bloqueado.
 - Al final ejecuta npm start y dime cómo abrir la app y probar el flujo principal.
 ```
@@ -203,8 +210,8 @@ Implementa specs/03-plan.md tarea por tarea, en orden.
 Si a mitad del bloque el dominio no tiene `npm test` en verde, pide:
 
 ```text
-Prioriza: deja el dominio con pruebas en verde, luego el endpoint y la pantalla
-del flujo principal. Mueve lo demás al final del plan como pendiente.
+Prioriza: deja el dominio con pruebas en verde, luego la API y la vista principal.
+Mueve las vistas secundarias al final del plan como pendiente.
 ```
 
 ---
@@ -212,7 +219,7 @@ del flujo principal. Mueve lo demás al final del plan como pendiente.
 ## Paso 5 · Pruebas de usuario final (10 min)
 
 1. Con la app corriendo, ábrela en el navegador del ambiente (puerto 3000).
-2. Abre `specs/04-uat.md` y ejecuta cada escenario **como lo haría el usuario de negocio**, desde la pantalla.
+2. Abre `specs/04-uat.md` y ejecuta cada escenario **como lo haría el usuario de negocio**, desde las vistas de la app.
 3. Registra el resultado obtenido y marca OK/NOK.
 
 Si un escenario falla:
@@ -225,7 +232,7 @@ Si el defecto está en el spec, actualízalo primero y regístralo en Control de
 
 ---
 
-## Paso 6 · Demo (2 min por voluntario)
+## Paso 6 · Demo (3 min por voluntario, uno por caso)
 
 1. Muestra tu `specs/01-spec-funcional.md` y un CA.
 2. Ejecuta ese escenario en la app.
@@ -240,9 +247,9 @@ Genera Spec Técnico y Plan en un solo paso:
 
 ```text
 Con el spec funcional APROBADO y kit/manifiesto-tecnico.md (solo el anexo de mi caso),
-crea specs/02-spec-tecnico.md compacto (funciones de dominio, endpoint y matriz CA → función → prueba)
-y specs/03-plan.md con las 6 tareas estándar: package.json+data, dominio+pruebas, API, pantalla,
-arranque, 04-uat.md. Márcalos ambos como APROBADO versión 1.0. No escribas código todavía.
+crea specs/02-spec-tecnico.md compacto (funciones de dominio, endpoints, vistas y matriz CA → función → prueba)
+y specs/03-plan.md con las 8 tareas estándar: package.json+data, dominio+pruebas, API, front base,
+vista principal, vistas secundarias, arranque, 04-uat.md. Márcalos ambos como APROBADO versión 1.0. No escribas código todavía.
 ```
 
 ---

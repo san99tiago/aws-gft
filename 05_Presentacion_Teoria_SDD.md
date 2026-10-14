@@ -5,19 +5,19 @@
 |---|---|
 | **Duración** | 30 minutos |
 | **Presentan** | Facilitador GFT y facilitador AWS |
-| **Slides** | 21 |
+| **Slides** | 19 |
 | **Objetivo** | Que cada participante entienda por qué el spec es la fuente única de verdad y llegue a la práctica sabiendo qué va a construir, con qué reglas y en cuánto tiempo |
 
-> Cada slide trae **En pantalla** (lo que ve la audiencia, máximo 5 ideas) y **Notas** (lo que dice quien presenta). El texto marcado con **[COMPLETAR]** depende de mensajes que debe aportar AWS.
+
 
 | Bloque | Dur. | Lidera | Slides |
 |---|---|---|---|
 | 1. Apertura y propósito | 5' | GFT & AWS | 1 – 3 |
 | 2. La evolución del desarrollador | 7' | GFT | 4 – 8 |
-| 3. Anatomía del SDD — visión general | 5' | GFT | 9 – 11 |
-| 4. Anatomía del SDD — detalle y profundidad | 5' | AWS | 12 – 15 |
-| 5. SDD con Claude Code sobre AWS | 5' | AWS | 16 – 19 |
-| 6. Reglas del juego | 3' | GFT | 20 – 21 |
+| 3. Anatomía del SDD — visión general | 5' | GFT | 9 |
+| 4. Anatomía del SDD — detalle y profundidad | 5' | AWS | 10 – 13 |
+| 5. SDD con Claude Code sobre AWS | 5' | AWS | 14 – 17 |
+| 6. Reglas del juego | 3' | GFT | 18 – 19 |
 
 ---
 
@@ -65,13 +65,17 @@
 ### Slide 5 · El vibe coding seduce, pero no escala
 
 **En pantalla**
-- Un prompt y aparece una app en minutos: ideal para explorar
+
+![Vibe coding vs. Software engineering: el mismo cohete en la superficie, cimientos opuestos bajo tierra](IMG_8353.jpg)
+
+*Diseño:* la imagen ocupa casi todo el slide. A un costado, solo tres ideas cortas:
 - **Sin trazabilidad:** no hay forma de ligar código con regla de negocio
 - **Sin gobierno:** decisiones implícitas que nadie aprobó
 - **Con retrabajo:** cada cambio de política es regenerar y revisar todo
-- En banca: auditoría, regulador y explicabilidad no son opcionales
 
-**Notas:** Reconocer el valor real del vibe coding para prototipos. Luego el ejemplo concreto: el regulador pregunta por qué se rechazó un crédito. Con vibe coding la respuesta es "lo decidió el código que generó la IA". Con SDD la respuesta es "regla RN-06, aprobada en el spec versión 1.0, verificada por la prueba E4".
+**Notas:** Dejar que la sala mire la imagen unos segundos antes de hablar. Por encima de la tierra los dos cohetes son idénticos: eso es lo que se ve en una demo de vibe coding, una app que funciona en minutos, y por eso seduce. La diferencia está bajo tierra. A la izquierda, código desordenado, dependencias desconocidas, parches rápidos y ninguna estructura: funciona hasta que hay que cambiarlo, escalarlo o auditarlo, y entonces está en riesgo de fallar. A la derecha, arquitectura, seguridad desde el diseño, monitoreo y sistemas escalables: lo que nadie ve en la demo, pero lo que sostiene el despegue.
+
+Aterrizarlo en banca con el ejemplo del regulador que pregunta por qué se rechazó un crédito. Con vibe coding la respuesta es "lo decidió el código que generó la IA". Con SDD la respuesta es "regla RN-06, aprobada en el spec versión 1.0, verificada por la prueba E4". El mensaje de cierre: SDD es la forma de construir los cimientos de la derecha a la velocidad de la izquierda.
 
 ### Slide 6 · El valor se mueve
 
@@ -121,29 +125,7 @@ Requerimiento → Brief → Specs → Plan → Código → Pruebas → Despliegu
 
 ## Bloque 3 · Anatomía del SDD — visión general (5') — GFT
 
-### Slide 9 · Principio rector
-
-**En pantalla**
-- **Ninguna línea de código nace sin un spec aprobado**
-- El spec es la **fuente única de verdad**
-- La IA es el acelerador; la persona es la dueña de cada aprobación
-
-**Notas:** Dejar esta frase en pantalla unos segundos. Es la regla que van a aplicar en toda la práctica y la que está escrita en el `CLAUDE.md` que van a crear.
-
-### Slide 10 · El Marco SDD de GFT
-
-**En pantalla**
-
-```
-① Brief          →  ② Spec              →  ③ Ejecución acelerada  →  ④ Validación
-Funcional          Funcional               Plan                      Pruebas de
-Técnico            Técnico                 Código                    usuario final
-───────────────── Gobierno transversal: Spec ID · IDs · gates ─────────────────
-```
-
-**Notas:** Recorrer las cuatro etapas de izquierda a derecha. Remarcar que el gobierno no es una etapa al final: atraviesa todo el flujo.
-
-### Slide 11 · Qué responde cada artefacto
+### Slide 9 · Qué responde cada artefacto
 
 **En pantalla**
 
@@ -162,7 +144,7 @@ Técnico            Técnico                 Código                    usuario 
 
 ## Bloque 4 · Anatomía del SDD — detalle y profundidad (5') — AWS
 
-### Slide 12 · Todo tiene un ID
+### Slide 10 · Todo tiene un ID
 
 **En pantalla**
 - **Spec ID:** `ORI-LI-F-001` (funcional) · `ORI-LI-T-001` (técnico)
@@ -173,7 +155,7 @@ Técnico            Técnico                 Código                    usuario 
 
 **Notas:** Los IDs son lo que convierte un documento en un contrato verificable. Sin ID no hay trazabilidad posible.
 
-### Slide 13 · Trazabilidad de punta a punta
+### Slide 11 · Trazabilidad de punta a punta
 
 **En pantalla**
 
@@ -184,13 +166,13 @@ RN-06  Score ≥ 600 o se rechaza (R-03)
             Entonces la solicitud queda RECHAZADA con motivo interno R-03
             Y el mensaje al cliente no revela el motivo
        └─ T-02  Dominio + pruebas
-            └─ src/domain.js        // RN-06
-                 └─ test/domain.test.js   // CA-08 · Escenario E4
+            └─ backend/src/domain.js        // RN-06
+                 └─ backend/test/domain.test.js   // CA-08 · Escenario E4
 ```
 
 **Notas:** Ejemplo real del Caso A. Contar que en la demo final van a hacer justo esto: tomar un CA y buscarlo en el código con `grep`. Esa es la respuesta al regulador de la slide 5.
 
-### Slide 14 · Gates de aprobación
+### Slide 12 · Gates de aprobación
 
 **En pantalla**
 - **Gate 1:** Spec Funcional APROBADO → recién ahí se diseña
@@ -200,7 +182,7 @@ RN-06  Score ≥ 600 o se rechaza (R-03)
 
 **Notas:** Los gates son el punto de control humano. En la práctica, cada participante es el dueño de sus gates: revisa con el checklist de la guía y aprueba con un prompt que cambia el estado y la versión del spec.
 
-### Slide 15 · El spec es un artefacto vivo
+### Slide 13 · El spec es un artefacto vivo
 
 **En pantalla**
 1. Al construir aparece un vacío o una contradicción
@@ -214,7 +196,7 @@ RN-06  Score ≥ 600 o se rechaza (R-03)
 
 ## Bloque 5 · SDD con Claude Code sobre AWS (5') — AWS
 
-### Slide 16 · Cómo Claude Code trabaja con specs
+### Slide 14 · Cómo Claude Code trabaja con specs
 
 **En pantalla**
 - **`CLAUDE.md`:** las reglas permanentes del proyecto
@@ -224,7 +206,7 @@ RN-06  Score ≥ 600 o se rechaza (R-03)
 
 **Notas:** Claude Code no es un autocompletado: es un agente que trabaja sobre los archivos del proyecto. Por eso un buen spec en el repositorio rinde más que un buen prompt suelto.
 
-### Slide 17 · Claude en Amazon Bedrock
+### Slide 15 · Claude en Amazon Bedrock
 
 **En pantalla**
 - Modelos Claude dentro de la cuenta AWS
@@ -234,13 +216,13 @@ RN-06  Score ≥ 600 o se rechaza (R-03)
 
 **Notas:** Este es el argumento para entornos regulados: la misma experiencia de desarrollo, con los controles de seguridad y gobierno de AWS.
 
-### Slide 18 · Del laptop a la nube
+### Slide 16 · Del laptop a la nube
 
 **En pantalla**
 
 | Hoy en el taller | En producción sobre AWS |
 |---|---|
-| `public/` estático | Amazon S3 + Amazon CloudFront |
+| `frontend/` | Amazon S3 + Amazon CloudFront |
 | Express `/api` | Amazon API Gateway + AWS Lambda |
 | Registros JSON | Amazon DynamoDB |
 | Parámetros JSON | AWS AppConfig |
@@ -248,7 +230,7 @@ RN-06  Score ≥ 600 o se rechaza (R-03)
 
 **Notas:** La arquitectura del taller es deliberadamente simple, pero el spec no cambia al llevarla a producción: lo que cambia es dónde vive cada pieza.
 
-### Slide 19 · Tu ambiente hoy
+### Slide 17 · Tu ambiente hoy
 
 **En pantalla**
 - **Claude Code en el navegador**, sin instalar nada
@@ -260,21 +242,17 @@ RN-06  Score ≥ 600 o se rechaza (R-03)
 
 ## Bloque 6 · Reglas del juego (3') — GFT
 
-### Slide 20 · Elige tu caso
+### Slide 18 · Elige tu caso
 
 **En pantalla**
+- **A** · Originación digital de Crédito de Libre Inversión
+- **B** · Pricing Engine de Crédito de Consumo
 
-| Caso | Construyes | Para quién |
-|---|---|---|
-| **A · Originación** | Decisión de crédito en una pantalla | Perfiles de experiencia y front |
-| **B · Pricing** | Tasa en cascada con piso y tope | Perfiles de producto y cálculo |
-| **C · Riesgo** | Knock-out, scorecard y explicación | Perfiles de reglas y analítica |
+Datos ficticios · varias vistas por caso · mismo tiempo de construcción
 
-Datos ficticios · una pantalla por caso · mismo tiempo de construcción
+**Notas:** Asignar los casos mitad y mitad. Recordar que el kit trae el Manifiesto Funcional del caso, el Manifiesto Técnico y la Guía del Participante con los prompts listos.
 
-**Notas:** Asignar los casos por tercios. Recordar que el kit trae el Manifiesto Funcional del caso, el Manifiesto Técnico y la Guía del Participante con los prompts listos.
-
-### Slide 21 · Tu ruta en 75 minutos
+### Slide 19 · Tu ruta en 75 minutos
 
 **En pantalla**
 
